@@ -1,8 +1,9 @@
 en:
   name: English
-  subtitle: Theme for Hexo
-  author: Theme NexT
-  description: Stay Simple. Stay NexT.
+  title: 布道者
+  subtitle: Michael's Blog
+  author: Michael 
+  description: Very ashamed, I only made very few records.
 ru:
   name: Русский
   subtitle: Тема для Hexo
