@@ -81,3 +81,16 @@ marked:
 search:
   path: search.json
   field: all
+
+# Post excerpt settings
+excerpt_link:
+  enable: true
+  label: "阅读全文 »" # 按钮文字
+  style: button # 按钮样式，可选值：link, button
+
+# Post meta settings
+post_meta:
+  date: true
+  categories: true
+  tags: true
+  word_count: true

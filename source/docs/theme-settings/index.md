@@ -4,6 +4,7 @@ date: 2018-02-08 18:50:03
 description: NexT User Docs – Theme Settings
 ---
 
+
 One of the guiding principles of NexT is to hide complex details and give you a simple but flexible config, so you can use it easily.
 
 {% note info %}
