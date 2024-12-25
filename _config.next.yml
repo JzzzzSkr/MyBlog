@@ -89,12 +89,16 @@ toc:
 # ============================================================= #
 
 footer:
-  since: 2014
+  since: 2024
   icon:
     name: fa fa-heart
     animated: true
     color: "#808080"
-  copyright: NexT
+  copyright: Michael Liang
+  powered: true
+  theme: true
+  source: true
+
 
 
 # ============================================================= #
