@@ -59,7 +59,7 @@ menu_settings:
 
 sidebar:
   position: left
-  display: post
+  display: post, category, tag
   padding: 18
   offset: 12
 
@@ -114,7 +114,7 @@ symbols_count_time:
   item_text_total: true
 
 post_edit:
-  enable: true
+  enable: false
   url: https://github.com/next-theme/theme-next-docs/edit/master/source/
 
 

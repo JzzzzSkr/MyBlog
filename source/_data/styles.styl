@@ -57,3 +57,33 @@
 .footer-inner .footer-custom{
   display: none
 }
+
+.categories-list {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.category-all-page .category-list-count {
+    font-size: 0.85em;
+    background: none;
+    border-radius: 10px;
+    color: rgb(187, 187, 187);
+    font-weight: bold;
+    line-height: 1;
+    margin-left: 0.35em;
+    padding: 2px 5px;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.category-all-page .category-list-count::before {
+    content: " ("; /* 左括号和空格 */
+    margin-right: 2px;
+}
+
+.category-all-page .category-list-count::after {
+    content: ") "; /* 右括号和空格 */
+    margin-left: 2px;
+}

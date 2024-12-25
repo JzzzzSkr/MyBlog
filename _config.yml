@@ -55,6 +55,9 @@ index_generator:
 default_category: uncategorized
 category_map:
 tag_map:
+category_generator:
+  per_page: 10  # 每页显示的分类数量，设置为 0 表示不分页
+  order_by: -date  # 分类排序依据
 
 # Date / Time format
 date_format: YYYY-MM-DD
