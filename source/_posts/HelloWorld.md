@@ -1,15 +1,15 @@
 ---
 layout: post
-title: HelloWorld
+title: Hello World
 date: 2024-12-24 20:10:01
-tags: 
-- Java
 categories: 
-- Developing
+    - Developing
+tags: 
+    - Java
 comments: false
 ---
+
 
 My first blog post.
 
 <!-- more -->
-
