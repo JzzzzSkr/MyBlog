@@ -13,6 +13,8 @@ timezone: UTC
 
 url: https://JzzzzSkr.github.io/MyBlog
 root: /MyBlog/
+permalink: :title/
+permalink_defaults:
 
 # Directory
 source_dir: source
