@@ -22,9 +22,9 @@ In 2024, I graduated from the University of Tasmania with a major in Artificial 
 ## My Certificate
 
 <div style="display: flex; gap: 20px;">
-    <img src="/images/cca.png" alt="CCA" style="width: 170px;">
-    <img src="/images/cml.png" alt="CML" style="width: 170px;">
-    <img src="/images/pcap.png" alt="PCAP" style="width: 170px;">
+    <img src="/MyBlog/images/cca.png" alt="CCA" style="width: 170px;">
+    <img src="/MyBlog/images/cml.png" alt="CML" style="width: 170px;">
+    <img src="/MyBlog/images/pcap.png" alt="PCAP" style="width: 170px;">
 </div>
 
 ## What I Believe
