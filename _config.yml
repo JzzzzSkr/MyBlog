@@ -10,9 +10,9 @@ language: en
 timezone: UTC
 
 # URL
-url: https://theme-next.js.org
-permalink: :title/
-permalink_defaults:
+
+url: https://JzzzzSkr.github.io/MyBlog
+root: /MyBlog/
 
 # Directory
 source_dir: source
@@ -34,7 +34,7 @@ titlecase: false # Transform title into titlecase
 external_link:
   enable: true # Open external links in new tab
   field: site # Apply to the whole site
-  exclude: ''
+  exclude: ""
 filename_case: 0
 render_drafts: false
 post_asset_folder: false
@@ -44,7 +44,7 @@ highlight:
   enable: true
   line_number: false
   auto_detect: false
-  tab_replace: ''
+  tab_replace: ""
 
 # Home page setting
 index_generator:
@@ -56,8 +56,8 @@ default_category: uncategorized
 category_map:
 tag_map:
 category_generator:
-  per_page: 10  # 每页显示的分类数量，设置为 0 表示不分页
-  order_by: -date  # 分类排序依据
+  per_page: 10 # 每页显示的分类数量，设置为 0 表示不分页
+  order_by: -date # 分类排序依据
 
 # Date / Time format
 date_format: YYYY-MM-DD
@@ -97,3 +97,9 @@ post_meta:
   categories: true
   tags: true
   word_count: true
+
+deploy:
+  type: git
+  repo: https://github.com/JzzzzSkr/MyBlog.git
+  # example, https://github.com/hexojs/hexojs.github.io
+  branch: gh-pages
