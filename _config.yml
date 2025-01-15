@@ -11,6 +11,7 @@ timezone: UTC
 
 # URL
 
+# url: https://theme-next.js.org
 url: https://JzzzzSkr.github.io/MyBlog
 root: /MyBlog/
 permalink: :title/

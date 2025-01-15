@@ -19,8 +19,8 @@ Creating a web-based music player is an exciting project that combines modern we
 - **Rich UI Elements**: Material-UI ensures polished icons and buttons.
 
 <div style="display: flex; justify-content: center; gap: 20px; align-items: stretch;">
-  <img src="/images/musicPlayer/musicMoive.png" alt="Website Screenshot 1" style="width: 45%; height: auto; border-radius: 8px; object-fit: cover;">
-  <img src="/images/musicPlayer/musicPlayer.png" alt="Website Screenshot 2" style="width: 45%; height: auto; border-radius: 8px; object-fit: cover;">
+  <img src="/MyBlog/images/musicPlayer/musicMoive.png" alt="Website Screenshot 1" style="width: 45%; height: auto; border-radius: 8px; object-fit: cover;">
+  <img src="/MyBlog/images/musicPlayer/musicPlayer.png" alt="Website Screenshot 2" style="width: 45%; height: auto; border-radius: 8px; object-fit: cover;">
 </div>
 
 ## Tools Used
@@ -65,11 +65,13 @@ Some specific coding techniques that I can share with you.
 - **Code**:
 
   ```jsx
-  {isPlaying && currentSong === item ? (
-    <PauseCircleOutlineIcon />
-  ) : (
-    <PlayCircleOutlineIcon />
-  )}
+  {
+    isPlaying && currentSong === item ? (
+      <PauseCircleOutlineIcon />
+    ) : (
+      <PlayCircleOutlineIcon />
+    );
+  }
   ```
 
   - Conditional rendering is used to dynamically display the play or pause icon based on the current state of the song.

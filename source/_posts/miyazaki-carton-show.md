@@ -23,8 +23,8 @@ This website is designed as an introduction to the world of Miyazaki's cartoons.
 The application is fully responsive, offering a seamless viewing experience across different devices.
 
 <div style="display: flex; justify-content: center; gap: 20px; align-items: center;">
-  <img src="/images/miyazaki/InWeb.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">
-  <img src="/images/miyazaki/InPhone.png" alt="Website Screenshot 2" style="max-height: 500px; width: auto; border-radius: 8px;">
+  <img src="/MyBlog/images/miyazaki/InWeb.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">
+  <img src="/MyBlog/images/miyazaki/InPhone.png" alt="Website Screenshot 2" style="max-height: 500px; width: auto; border-radius: 8px;">
 </div>
 
 ## Conclusion

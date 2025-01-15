@@ -9,6 +9,7 @@ categories: Web
 The **3D Customized Product App** integrates with Shopify to provide users with real-time product customization using interactive 3D models. Built with technologies like **React** and **Three.js**, it allows seamless adjustments to product attributes such as colors, textures, and sizes, enhancing the e-commerce experience.
 
 <!-- more -->
+
 ## Key Features
 
 **1. Real-Time 3D Customization**
@@ -49,7 +50,7 @@ Displays available 3D models for selection with features like:
 - **Smooth Navigation**: Guides users to customization pages with React Router.
 
 <div style="display: flex; justify-content: center; gap: 20px; align-items: center;">
-  <img src="/images/3DModelPlugin/home.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">
+  <img src="/MyBlog/images/3DModelPlugin/home.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">
 </div>
 
 **Product Selection Page**
@@ -60,7 +61,7 @@ Refines product browsing by filtering items that include 3D models. Users can:
 - Select models for further customization.
 
 <div style="display: flex; justify-content: center; gap: 20px; align-items: center;">
-  <img src="/images/3DModelPlugin/producselect.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">
+  <img src="/MyBlog/images/3DModelPlugin/producselect.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">
 </div>
 
 **Configuration Page**
@@ -71,8 +72,8 @@ The heart of the app where users customize products:
 - **Interactive Tools**: Includes sliders, dropdowns, and color pickers for customization.
 
 <div style="display: flex; justify-content: center; gap: 20px; align-items: center;">
-  <img src="/images/3DModelPlugin/Configuration.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">
-  <img src="/images/3DModelPlugin/customization2.png" alt="Website Screenshot 2" style="max-width: 45%; height: auto; border-radius: 8px;" >
+  <img src="/MyBlog/images/3DModelPlugin/Configuration.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">
+  <img src="/MyBlog/images/3DModelPlugin/customization2.png" alt="Website Screenshot 2" style="max-width: 45%; height: auto; border-radius: 8px;" >
 </div>
 
 **Confirmation Page**
@@ -83,7 +84,7 @@ Summarizes user configurations before finalizing:
 - Stores configurations in Shopify metafields for checkout.
 
 <div style="display: flex; justify-content: center; gap: 20px; align-items: center;">
-  <img src="/images/3DModelPlugin/confirmation.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">
+  <img src="/MyBlog/images/3DModelPlugin/confirmation.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">
 </div>
 
 **Add Page**
@@ -94,7 +95,7 @@ Facilitates adding new 3D models:
 - Contact details for further assistance.
 
 <div style="display: flex; justify-content: center; gap: 20px; align-items: center;">
-  <img src="/images/3DModelPlugin/add.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">
+  <img src="/MyBlog/images/3DModelPlugin/add.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">
 </div>
 
 ## Technical Stack
