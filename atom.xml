@@ -6,7 +6,7 @@
   <link href="https://jzzzzskr.github.io/MyBlog/atom.xml" rel="self"/>
   
   <link href="https://jzzzzskr.github.io/MyBlog/"/>
-  <updated>2025-10-19T00:06:44.331Z</updated>
+  <updated>2025-12-04T13:11:48.068Z</updated>
   <id>https://jzzzzskr.github.io/MyBlog/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Bit Coin Back Trader</title>
+    <link href="https://jzzzzskr.github.io/MyBlog/Bit-Coin-Back-Trader/"/>
+    <id>https://jzzzzskr.github.io/MyBlog/Bit-Coin-Back-Trader/</id>
+    <published>2025-12-04T23:39:00.000Z</published>
+    <updated>2025-12-04T13:11:48.068Z</updated>
+    
+    <content type="html"><![CDATA[<p>Recently, Bitcoin has dropped from its peak of <strong>$126,200</strong>. This year, numerous countries have begun investing in Bitcoin, sparking widespread debate about its future trajectory: some predict it could plummet to zero, while others anticipate it surging to <strong>$100,000 by 2030</strong>.</p><p>To deepen my understanding of Bitcoin’s current market situation and identify viable strategies for profiting in this bear market, I have conducted an analysis and comparison of several trading strategies based on Bitcoin’s historical price data.</p><span id="more"></span><h2 id="Third-party-libraries"><a href="#Third-party-libraries" class="headerlink" title="Third-party libraries"></a>Third-party libraries</h2><ul><li><strong>matplotlib</strong>, <strong>plotly.graph_objects</strong> → draw the graph</li><li><strong>yfinance</strong> → source of the data</li><li><strong>numpy</strong>, <strong>pandas</strong> → analyze the data</li></ul><h2 id="Pulling-data-from-yfinance"><a href="#Pulling-data-from-yfinance" class="headerlink" title="Pulling data from yfinance"></a>Pulling data from yfinance</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ticker = <span class="string">&quot;BTC-AUD&quot;</span>           <span class="comment"># ← You can change it to anything you need such as NVDA, AAPL</span></span><br><span class="line">start_date = <span class="string">&quot;2018-12-27&quot;</span>    <span class="comment"># ← From</span></span><br><span class="line">end_date = <span class="string">&quot;2025-12-03&quot;</span>      <span class="comment"># ← To</span></span><br><span class="line"></span><br><span class="line">df = yf.download(ticker, start=start_date, end=end_date)</span><br><span class="line"></span><br><span class="line">df <span class="comment"># check it if you want</span></span><br></pre></td></tr></table></figure><p><strong>We will change column index to a normal format:</strong></p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">isinstance</span>(df.columns, pd.MultiIndex):</span><br><span class="line">    df.columns = [<span class="string">&#x27;_&#x27;</span>.join(col).strip() <span class="keyword">for</span> col <span class="keyword">in</span> df.columns.values]</span><br><span class="line"></span><br><span class="line">df.columns = [col.replace(<span class="string">f&quot;_<span class="subst">&#123;ticker&#125;</span>&quot;</span>, <span class="string">&quot;&quot;</span>) <span class="keyword">for</span> col <span class="keyword">in</span> df.columns]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(df.columns)</span><br></pre></td></tr></table></figure><p><strong>The output should be</strong></p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="string">&#x27;Close&#x27;</span>, <span class="string">&#x27;High&#x27;</span>, <span class="string">&#x27;Low&#x27;</span>, <span class="string">&#x27;Open&#x27;</span>, <span class="string">&#x27;Volume&#x27;</span>]</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;Recently, Bitcoin has dropped from its peak of &lt;strong&gt;$126,200&lt;/strong&gt;. This year, numerous countries have begun investing in Bitcoin, sparking widespread debate about its future trajectory: some predict it could plummet to zero, while others anticipate it surging to &lt;strong&gt;$100,000 by 2030&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;To deepen my understanding of Bitcoin’s current market situation and identify viable strategies for profiting in this bear market, I have conducted an analysis and comparison of several trading strategies based on Bitcoin’s historical price data.&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="JupyterNotebook" scheme="https://jzzzzskr.github.io/MyBlog/tags/JupyterNotebook/"/>
+    
+    <category term="Pandas" scheme="https://jzzzzskr.github.io/MyBlog/tags/Pandas/"/>
+    
+  </entry>
   
   <entry>
     <title>Decompress zip file in rust</title>
