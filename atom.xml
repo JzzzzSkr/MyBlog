@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>NexT</title>
+  
+  
+  <link href="https://jzzzzskr.github.io/MyBlog/atom.xml" rel="self"/>
+  
+  <link href="https://jzzzzskr.github.io/MyBlog/"/>
+  <updated>2025-10-19T00:06:44.331Z</updated>
+  <id>https://jzzzzskr.github.io/MyBlog/</id>
+  
+  <author>
+    <name>John Doe</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Decompress zip file in rust</title>
+    <link href="https://jzzzzskr.github.io/MyBlog/RustDecompress/"/>
+    <id>https://jzzzzskr.github.io/MyBlog/RustDecompress/</id>
+    <published>2025-01-15T21:20:54.000Z</published>
+    <updated>2025-10-19T00:06:44.331Z</updated>
+    
+    <content type="html"><![CDATA[<p>This program allow user to input a path of a zip file. Then it will automatically extracts the contents of the zip file and outputs all files to the root directory.</p><span id="more"></span><h2 id="Step-by-Step-Guide"><a href="#Step-by-Step-Guide" class="headerlink" title="Step-by-Step Guide"></a>Step-by-Step Guide</h2><p><strong>First, we will need to use Cargo to initialize the base structure of the project:</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cargo new Rust-Decompress</span><br><span class="line"><span class="built_in">cd</span> Rust-Decompress</span><br></pre></td></tr></table></figure><p><strong>We will delete all the default code in the <code>main.rs</code> file and import the necessary libraries, particularly <code>flate2</code> and <code>ZipArchive</code>.</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">use flate2::write::GzEncoder;</span><br><span class="line">use flate2::Compression;</span><br><span class="line">use std::<span class="built_in">env</span>;</span><br><span class="line">use std::<span class="built_in">env</span>::args;</span><br><span class="line">use std::fs::File;</span><br><span class="line">use std::io;</span><br><span class="line">use std::io::copy;</span><br><span class="line">use std::io::BufReader;</span><br><span class="line">use std::<span class="keyword">time</span>::Instant;</span><br><span class="line">use zip::ZipArchive;</span><br></pre></td></tr></table></figure><p><strong>We will write the logic code in the main function. First, we need to check how many arguments the user has input. If the number of arguments is less than or greater than two, then we have to quit the program.</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># This part of the code should be pasted into the start of the main function</span></span><br><span class="line"><span class="keyword">if</span> args().len() != 2 &#123;</span><br><span class="line">    eprintln!(<span class="string">&quot;Usage: `source`&quot;</span>);</span><br><span class="line">    <span class="built_in">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><strong>Get user input. In this case is the path of the zip file.</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">let</span> args: Vec&lt;String&gt; = <span class="built_in">env</span>::args().collect();</span><br><span class="line"><span class="built_in">let</span> zip_path = &amp;args[1];</span><br></pre></td></tr></table></figure><p><strong>Try to open the zip file and read it. We need ZipArchive this three party library to help us read the zip file</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># open zip file according by the path that user just entered</span></span><br><span class="line"><span class="built_in">let</span> file = File::open(zip_path).unwrap_or_else(|err| &#123;</span><br><span class="line">    eprintln!(<span class="string">&quot;Failed to open ZIP file: &#123;&#125;&quot;</span>, err);</span><br><span class="line">    std::process::<span class="built_in">exit</span>(1);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment"># new a BufReader obj</span></span><br><span class="line"><span class="built_in">let</span> mut buf_reader = BufReader::new(file);</span><br><span class="line"><span class="comment"># new a ZipArchive obj to read the zip file</span></span><br><span class="line"><span class="built_in">let</span> mut zip = ZipArchive::new(&amp;mut buf_reader).unwrap_or_else(|err| &#123;</span><br><span class="line">    eprintln!(<span class="string">&quot;Failed to read ZIP file: &#123;&#125;&quot;</span>, err);</span><br><span class="line">    std::process::<span class="built_in">exit</span>(1);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><p><strong>Then we gonna creat a for loop to extracting every singal file in zip file. Then save it into a dir</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Extract ever file in zip file</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> 0..zip.<span class="function"><span class="title">len</span></span>() &#123;</span><br><span class="line">    <span class="built_in">let</span> mut file = zip.by_index(i).unwrap();</span><br><span class="line">    <span class="built_in">let</span> file_path = file.name();</span><br><span class="line"></span><br><span class="line">    <span class="comment"># print the path to the target file</span></span><br><span class="line">    println!(<span class="string">&quot;Extracting: &#123;&#125;&quot;</span>, file_path);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">let</span> output_path = match file.<span class="function"><span class="title">enclosed_name</span></span>() &#123;</span><br><span class="line">        Some(path) =&gt; path.to_owned(),</span><br><span class="line">        None =&gt; <span class="built_in">continue</span>,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> file.<span class="function"><span class="title">is_dir</span></span>() &#123;</span><br><span class="line">        std::fs::create_dir_all(&amp;output_path).unwrap();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">let</span> Some(parent) = output_path.<span class="function"><span class="title">parent</span></span>() &#123;</span><br><span class="line">            std::fs::create_dir_all(parent).unwrap();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">let</span> mut output_file = File::create(&amp;output_path).unwrap();</span><br><span class="line">        io::copy(&amp;mut file, &amp;mut output_file).unwrap();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><strong>Congratulations! All done!</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">println!(<span class="string">&quot;Done!&quot;</span>);</span><br></pre></td></tr></table></figure><h2 id="How-to-run-it"><a href="#How-to-run-it" class="headerlink" title="How to run it"></a>How to run it</h2><p><strong>First, we need to ensure that we download all the necessary library files.</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Cargo.toml</span></span><br><span class="line">[package]</span><br><span class="line">name = <span class="string">&quot;decompress&quot;</span></span><br><span class="line">version = <span class="string">&quot;0.1.0&quot;</span></span><br><span class="line">edition = <span class="string">&quot;2021&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html</span></span><br><span class="line"></span><br><span class="line">[dependencies]</span><br><span class="line">flate2 = <span class="string">&quot;1.0.24&quot;</span></span><br><span class="line">zip = <span class="string">&quot;0.6.2&quot;</span></span><br></pre></td></tr></table></figure><p><strong>Then, run this command in the shell. Remember, you need to provide the path to the zip file on your local system. In this case, since I saved my zip file in the root directory, I can simply enter the file name directly.</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># &quot;1.zip&quot; is your zip file path</span></span><br><span class="line">cargo run 1.zip</span><br></pre></td></tr></table></figure><p><strong>Once you successfully run the program, you will see that it automatically generates a decompressed file in your root directory.</strong></p><h2 id="Explore-the-Project"><a href="#Explore-the-Project" class="headerlink" title="Explore the Project"></a>Explore the Project</h2><ul><li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0p6enp6U2tyL1J1c3QtRGVjb21wcmVzcw==">Check the Source Code on GitHub<i class="fa fa-external-link-alt"></i></span></li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;This program allow user to input a path of a zip file. Then it will automatically extracts the contents of the zip file and outputs all files to the root directory.&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Solana" scheme="https://jzzzzskr.github.io/MyBlog/categories/Solana/"/>
+    
+    
+    <category term="Rust" scheme="https://jzzzzskr.github.io/MyBlog/tags/Rust/"/>
+    
+    <category term="flate2" scheme="https://jzzzzskr.github.io/MyBlog/tags/flate2/"/>
+    
+    <category term="ZipArchive" scheme="https://jzzzzskr.github.io/MyBlog/tags/ZipArchive/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Shopify 3D model plugin</title>
+    <link href="https://jzzzzskr.github.io/MyBlog/Shopify-3D-model-plugin/"/>
+    <id>https://jzzzzskr.github.io/MyBlog/Shopify-3D-model-plugin/</id>
+    <published>2024-12-26T20:23:30.000Z</published>
+    <updated>2025-10-19T00:06:44.331Z</updated>
+    
+    <content type="html"><![CDATA[<p>The <strong>3D Customized Product App</strong> integrates with Shopify to provide users with real-time product customization using interactive 3D models. Built with technologies like <strong>React</strong> and <strong>Three.js</strong>, it allows seamless adjustments to product attributes such as colors, textures, and sizes, enhancing the e-commerce experience.</p><span id="more"></span><h2 id="Key-Features"><a href="#Key-Features" class="headerlink" title="Key Features"></a>Key Features</h2><p><strong>1. Real-Time 3D Customization</strong></p><p>Users can interact with 3D models directly on the product page. Features include:</p><ul><li><strong>Dynamic Updates</strong>: Adjust colors, textures, and sizes with real-time visual feedback.</li><li><strong>Interactive Controls</strong>: Rotate, zoom, and pan models seamlessly for an immersive experience.</li></ul><p><strong>2. Shopify Integration</strong></p><p>The app integrates seamlessly with Shopify’s backend:</p><ul><li><strong>Metafield Management</strong>: Stores user customization choices in Shopify metafields for easy retrieval and synchronization.</li><li><strong>Real-Time Data Fetching</strong>: Dynamically pulls product and 3D model data using Shopify APIs.</li></ul><p><strong>3. User-Friendly Interface</strong></p><p>Designed with Don Norman’s principles of usability:</p><ul><li><strong>Ease of Use</strong>: Intuitive UI with clear instructions and interactive elements.</li><li><strong>Error Prevention</strong>: Validates user inputs to minimize errors and ensure smooth interactions.</li></ul><p><strong>4. Backend Support</strong></p><p>The app leverages:</p><ul><li><strong>Express.js</strong> for server-side operations.</li><li><strong>GraphQL Admin API</strong> for efficient querying and updating of Shopify data.</li></ul><h2 id="Pages-Overview"><a href="#Pages-Overview" class="headerlink" title="Pages Overview"></a>Pages Overview</h2><p><strong>Home Page</strong></p><p>Displays available 3D models for selection with features like:</p><ul><li><strong>Dynamic Loading</strong>: Fetches models from Shopify’s backend using APIs.</li><li><strong>Smooth Navigation</strong>: Guides users to customization pages with React Router.</li></ul><div style="display: flex; justify-content: center; gap: 20px; align-items: center;">  <img src="/MyBlog/images/3DModelPlugin/home.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;"></div><p><strong>Product Selection Page</strong></p><p>Refines product browsing by filtering items that include 3D models. Users can:</p><ul><li>Compare product attributes like price and availability.</li><li>Select models for further customization.</li></ul><div style="display: flex; justify-content: center; gap: 20px; align-items: center;">  <img src="/MyBlog/images/3DModelPlugin/producselect.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;"></div><p><strong>Configuration Page</strong></p><p>The heart of the app where users customize products:</p><ul><li><strong>Real-Time Updates</strong>: Changes are instantly reflected on the 3D model.</li><li><strong>Interactive Tools</strong>: Includes sliders, dropdowns, and color pickers for customization.</li></ul><div style="display: flex; justify-content: center; gap: 20px; align-items: center;">  <img src="/MyBlog/images/3DModelPlugin/Configuration.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">  <img src="/MyBlog/images/3DModelPlugin/customization2.png" alt="Website Screenshot 2" style="max-width: 45%; height: auto; border-radius: 8px;" ></div><p><strong>Confirmation Page</strong></p><p>Summarizes user configurations before finalizing:</p><ul><li>Displays a visual and textual summary of choices.</li><li>Stores configurations in Shopify metafields for checkout.</li></ul><div style="display: flex; justify-content: center; gap: 20px; align-items: center;">  <img src="/MyBlog/images/3DModelPlugin/confirmation.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;"></div><p><strong>Add Page</strong></p><p>Facilitates adding new 3D models:</p><ul><li>Clear instructions for administrators to upload models to Shopify.</li><li>Contact details for further assistance.</li></ul><div style="display: flex; justify-content: center; gap: 20px; align-items: center;">  <img src="/MyBlog/images/3DModelPlugin/add.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;"></div><h2 id="Technical-Stack"><a href="#Technical-Stack" class="headerlink" title="Technical Stack"></a>Technical Stack</h2><ul><li><strong>Frontend</strong>: React, SCSS, Three.js, Zustand for state management.</li><li><strong>Backend</strong>: Express.js, Shopify GraphQL Admin API.</li><li><strong>3D Rendering</strong>: Three.js for high-quality model interactions.</li></ul><h2 id="Testing-and-Feedback"><a href="#Testing-and-Feedback" class="headerlink" title="Testing and Feedback"></a>Testing and Feedback</h2><p><strong>User Testing</strong></p><ul><li><strong>Positive Feedback</strong>: Users appreciated the real-time visualization and ease of customization.</li><li><strong>Improvements Needed</strong>: Suggestions included adding AR features and reducing initial model loading times.</li></ul><p><strong>Technical Testing</strong></p><ul><li><strong>Frontend</strong>: Validated UI responsiveness and 3D rendering performance.</li><li><strong>Backend</strong>: Ensured seamless API integration and data synchronization with Shopify.</li></ul><h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>This app enhances the e-commerce experience by providing a highly interactive and customizable 3D product visualization tool. By integrating with Shopify and leveraging advanced web technologies, it bridges the gap between user expectations and innovative online shopping experiences. Future improvements will focus on optimizing performance and expanding features such as augmented reality integration.</p><h2 id="Explore-the-Project"><a href="#Explore-the-Project" class="headerlink" title="Explore the Project"></a>Explore the Project</h2><p>If you want the source code, please email me !</p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;The &lt;strong&gt;3D Customized Product App&lt;/strong&gt; integrates with Shopify to provide users with real-time product customization using interactive 3D models. Built with technologies like &lt;strong&gt;React&lt;/strong&gt; and &lt;strong&gt;Three.js&lt;/strong&gt;, it allows seamless adjustments to product attributes such as colors, textures, and sizes, enhancing the e-commerce experience.&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Web" scheme="https://jzzzzskr.github.io/MyBlog/categories/Web/"/>
+    
+    
+    <category term="React" scheme="https://jzzzzskr.github.io/MyBlog/tags/React/"/>
+    
+    <category term="GraphQL" scheme="https://jzzzzskr.github.io/MyBlog/tags/GraphQL/"/>
+    
+    <category term="Three.js" scheme="https://jzzzzskr.github.io/MyBlog/tags/Three-js/"/>
+    
+    <category term="Shopify" scheme="https://jzzzzskr.github.io/MyBlog/tags/Shopify/"/>
+    
+    <category term="Express.js" scheme="https://jzzzzskr.github.io/MyBlog/tags/Express-js/"/>
+    
+    <category term="zustand" scheme="https://jzzzzskr.github.io/MyBlog/tags/zustand/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Building a Music Player on web</title>
+    <link href="https://jzzzzskr.github.io/MyBlog/Building-a-Web-Music-Player-with-Ant-Design-and-React/"/>
+    <id>https://jzzzzskr.github.io/MyBlog/Building-a-Web-Music-Player-with-Ant-Design-and-React/</id>
+    <published>2024-12-26T13:20:51.000Z</published>
+    <updated>2025-10-19T00:06:44.331Z</updated>
+    
+    <content type="html"><![CDATA[<p>Creating a web-based music player is an exciting project that combines modern web development tools and libraries. This application is inspired by the minimalist design of iOS, providing an intuitive interface for playing music and videos.</p><span id="more"></span><h2 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h2><ul><li><strong>Responsive Design</strong>: Built with CSS Grid and SCSS for consistent layouts across devices.</li><li><strong>State Management</strong>: Zustand efficiently handles player states like play, pause, and track changes.</li><li><strong>Interactive Navigation</strong>: Ant Design Tabs organize sections for easy browsing.</li><li><strong>Advanced Video Playback</strong>: Video.js powers smooth and customizable video experiences.</li><li><strong>Rich UI Elements</strong>: Material-UI ensures polished icons and buttons.</li></ul><div style="display: flex; justify-content: center; gap: 20px; align-items: stretch;">  <img src="/MyBlog/images/musicPlayer/musicMoive.png" alt="Website Screenshot 1" style="width: 45%; height: auto; border-radius: 8px; object-fit: cover;">  <img src="/MyBlog/images/musicPlayer/musicPlayer.png" alt="Website Screenshot 2" style="width: 45%; height: auto; border-radius: 8px; object-fit: cover;"></div><h2 id="Tools-Used"><a href="#Tools-Used" class="headerlink" title="Tools Used"></a>Tools Used</h2><ul><li><strong>React</strong>: For building dynamic components.</li><li><strong>SCSS</strong>: To style and structure layouts.</li><li><strong>Ant Design</strong>: For elegant UI components.</li><li><strong>Zustand</strong>: Lightweight state management.</li><li><strong>Video.js</strong>: Advanced video support.</li><li><strong>Material-UI</strong>: Consistent design elements.</li></ul><h2 id="Technique-Points"><a href="#Technique-Points" class="headerlink" title="Technique Points"></a>Technique Points</h2><p>Some specific coding techniques that I can share with you.</p><h3 id="1-Using-React-Fragment"><a href="#1-Using-React-Fragment" class="headerlink" title="1. Using React Fragment"></a><strong>1. Using React Fragment</strong></h3><ul><li><p><strong>Code</strong>:</p><figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">&lt;<span class="title class_">React</span>.<span class="property">Fragment</span> key=&#123;index&#125;&gt;</span><br></pre></td></tr></table></figure><ul><li><code>React.Fragment</code> is used to wrap multiple child elements without adding extra DOM nodes.</li><li>The <code>key</code> attribute is critical for React&#39;s performance optimization, allowing it to uniquely identify each child component during rendering.</li></ul></li></ul><h3 id="2-Dynamic-List-Rendering"><a href="#2-Dynamic-List-Rendering" class="headerlink" title="2. Dynamic List Rendering"></a><strong>2. Dynamic List Rendering</strong></h3><ul><li><p><strong>Code</strong>:</p><figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">&#123;songList.<span class="title function_">map</span>(<span class="function">(<span class="params">item, index</span>) =&gt;</span> (</span><br><span class="line">  ...</span><br><span class="line">))&#125;</span><br></pre></td></tr></table></figure><ul><li>The <code>map</code> method is used to dynamically generate list items based on the <code>songList</code> data.</li><li>Each <code>item</code> in the list contains information about the song (e.g., image, title, singer, time), which is used to construct the corresponding UI.</li></ul></li></ul><h3 id="3-Conditional-Rendering"><a href="#3-Conditional-Rendering" class="headerlink" title="3. Conditional Rendering"></a><strong>3. Conditional Rendering</strong></h3><ul><li><p><strong>Code</strong>:</p><figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  isPlaying &amp;&amp; currentSong === item ? (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">PauseCircleOutlineIcon</span> /&gt;</span></span></span><br><span class="line">  ) : (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">PlayCircleOutlineIcon</span> /&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li>Conditional rendering is used to dynamically display the play or pause icon based on the current state of the song.</li><li>If the current song is playing, a pause icon is displayed; otherwise, a play icon is shown.</li></ul></li></ul><h3 id="4-State-Management"><a href="#4-State-Management" class="headerlink" title="4. State Management"></a><strong>4. State Management</strong></h3><ul><li><p><strong>Code</strong>:</p><figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">onClick=&#123;<span class="function">() =&gt;</span></span><br><span class="line">  currentSong === item ? <span class="title function_">togglePlay</span>() : <span class="title function_">setCurrentSong</span>(item)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li><code>onClick</code> handles user interaction for each song in the list.</li><li>If the currently selected song is already playing, the <code>togglePlay</code> function is triggered to pause or play the song.</li><li>Otherwise, <code>setCurrentSong</code> updates the state to make the selected song the current song.</li></ul></li></ul><h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>This project combines modern tools to create a sleek and functional music player. Future improvements include playlist management and integration with streaming services.</p><h2 id="Explore-the-Project"><a href="#Explore-the-Project" class="headerlink" title="Explore the Project"></a>Explore the Project</h2><ul><li><a href="https://jzzzzskr.github.io/player/">View the Website Live</a></li><li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0p6enp6U2tyL3BsYXllcg==">Check the Source Code on GitHub<i class="fa fa-external-link-alt"></i></span></li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;Creating a web-based music player is an exciting project that combines modern web development tools and libraries. This application is inspired by the minimalist design of iOS, providing an intuitive interface for playing music and videos.&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Web" scheme="https://jzzzzskr.github.io/MyBlog/categories/Web/"/>
+    
+    
+    <category term="React" scheme="https://jzzzzskr.github.io/MyBlog/tags/React/"/>
+    
+    <category term="SCSS" scheme="https://jzzzzskr.github.io/MyBlog/tags/SCSS/"/>
+    
+    <category term="Video.js" scheme="https://jzzzzskr.github.io/MyBlog/tags/Video-js/"/>
+    
+    <category term="AntDesign" scheme="https://jzzzzskr.github.io/MyBlog/tags/AntDesign/"/>
+    
+    <category term="Zustand" scheme="https://jzzzzskr.github.io/MyBlog/tags/Zustand/"/>
+    
+    <category term="Material-UI" scheme="https://jzzzzskr.github.io/MyBlog/tags/Material-UI/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Basics of Using React and SCSS to Create a Miyazaki Cartoon Website</title>
+    <link href="https://jzzzzskr.github.io/MyBlog/miyazaki-carton-show/"/>
+    <id>https://jzzzzskr.github.io/MyBlog/miyazaki-carton-show/</id>
+    <published>2024-12-26T12:45:00.000Z</published>
+    <updated>2025-10-19T00:06:44.331Z</updated>
+    
+    <content type="html"><![CDATA[<p>Creating a Miyazaki cartoon website offers a fantastic opportunity to explore the capabilities of React and SCSS. This project showcases how these technologies can be leveraged to build a visually appealing and responsive web application. Let me walk you through the key elements of this project.</p><span id="more"></span><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>This website is designed as an introduction to the world of Miyazaki&#39;s cartoons. It aims to provide an engaging user experience while featuring:</p><ul><li><strong>React Router</strong>: For seamless navigation across pages.</li><li><strong>ReactDOM</strong>: To render React components effectively.</li><li><strong>CSS Grid and Flexbox</strong>: For a flexible and well-structured layout.</li><li><strong>Media Queries</strong>: Ensuring responsiveness for various screen sizes.</li><li><strong>Bootstrap</strong>: To enhance design consistency and speed up development.</li></ul><p>The application is fully responsive, offering a seamless viewing experience across different devices.</p><div style="display: flex; justify-content: center; gap: 20px; align-items: center;">  <img src="/MyBlog/images/miyazaki/InWeb.png" alt="Website Screenshot 1" style="max-width: 45%; height: auto; border-radius: 8px;">  <img src="/MyBlog/images/miyazaki/InPhone.png" alt="Website Screenshot 2" style="max-height: 500px; width: auto; border-radius: 8px;"></div><h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Building this website not only provided insights into Miyazaki&#39;s magical world but also enhanced my skills in React and SCSS. The project challenged me to think critically about design and interactivity while utilizing modern web development tools.</p><p>I hope this project inspires others to dive into React and SCSS to create their own amazing web applications!</p><p>Feel free to explore the website and leave your feedback. Happy coding!</p><p>Let me know what you think about this project or if you have any questions!</p><h2 id="Explore-the-Project"><a href="#Explore-the-Project" class="headerlink" title="Explore the Project"></a>Explore the Project</h2><ul><li><a href="https://jzzzzskr.github.io/miyazaki/">View the Website Live</a></li><li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0p6enp6U2tyL21peWF6YWtp">Check the Source Code on GitHub<i class="fa fa-external-link-alt"></i></span></li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;Creating a Miyazaki cartoon website offers a fantastic opportunity to explore the capabilities of React and SCSS. This project showcases how these technologies can be leveraged to build a visually appealing and responsive web application. Let me walk you through the key elements of this project.&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Web" scheme="https://jzzzzskr.github.io/MyBlog/categories/Web/"/>
+    
+    
+    <category term="React" scheme="https://jzzzzskr.github.io/MyBlog/tags/React/"/>
+    
+    <category term="SCSS" scheme="https://jzzzzskr.github.io/MyBlog/tags/SCSS/"/>
+    
+    <category term="Web Development" scheme="https://jzzzzskr.github.io/MyBlog/tags/Web-Development/"/>
+    
+    <category term="Bootstrap" scheme="https://jzzzzskr.github.io/MyBlog/tags/Bootstrap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="https://jzzzzskr.github.io/MyBlog/HelloWorld/"/>
+    <id>https://jzzzzskr.github.io/MyBlog/HelloWorld/</id>
+    <published>2024-12-24T20:10:01.000Z</published>
+    <updated>2025-10-19T00:06:44.331Z</updated>
+    
+    <content type="html"><![CDATA[<p>My first blog post.</p><span id="more"></span>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;My first blog post.&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+</feed>
